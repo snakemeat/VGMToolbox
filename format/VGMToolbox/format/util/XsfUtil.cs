@@ -948,7 +948,8 @@ namespace VGMToolbox.format.util
             {
                 Type dataType = FormatUtil.getObjectType(typeFs);
 
-                if (dataType != null && dataType.Name.Equals("Xsf"))
+                if (dataType != null && 
+                        (dataType.Name.Equals("Xsf") || dataType.BaseType.Name.Equals("Xsf")))
                 {
                     Xsf xsfFile = new Xsf();
                     xsfFile.Initialize(typeFs, pPath);
