@@ -110,14 +110,17 @@ namespace VGMToolbox.format.iso
         {
             CdSectorType mode;
             byte[] sectorHeader;
-            byte[] dataChunk;
+            byte[] dataChunk = null;
 
             if (isRaw)
             {
                 sectorHeader = ParseFile.ParseSimpleOffset(sectorBytes, 0, MAX_HEADER_SIZE);
                 mode = GetSectorType(sectorHeader);
 
-                dataChunk = ParseFile.ParseSimpleOffset(sectorBytes, CdRom.ModeHeaderSize[mode], CdRom.ModeDataSize[mode]);
+                if (mode != CdSectorType.Unknown)
+                {
+                    dataChunk = ParseFile.ParseSimpleOffset(sectorBytes, CdRom.ModeHeaderSize[mode], CdRom.ModeDataSize[mode]);
+                }
             }
             else
             {
