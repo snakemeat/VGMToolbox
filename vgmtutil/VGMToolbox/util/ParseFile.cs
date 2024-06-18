@@ -2240,5 +2240,45 @@ namespace VGMToolbox.util
 
             return ret;
         }
+
+        public static string ReadAsciiString(Stream inStream, long offset, long maxLength)
+        {
+            long maxReadOffset = inStream.Length;
+            
+            int stringLength = 0;
+            int codePage;
+
+            int dummy;
+            byte[] stringBytes;
+            string ret = String.Empty;
+
+            // move pointer
+            inStream.Position = offset;
+
+            // read until NULL or Max Length Reached
+            long i = offset;
+            
+            while ((i <= maxReadOffset) && (stringLength < maxLength))
+            {
+                dummy = inStream.ReadByte();
+
+                if (dummy > 0)
+                {
+                    stringLength++;
+                }
+                else if (dummy <= 0)
+                {
+                    break;
+                }
+            }
+
+            // parse string
+            stringBytes = ParseSimpleOffset(inStream, offset, stringLength);
+            codePage = ByteConversion.GetPredictedCodePageForTags(stringBytes);
+            ret = ByteConversion.GetEncodedText(stringBytes, codePage);
+            //ret = ByteConversion.GetAsciiText(stringBytes);
+
+            return ret;
+        }
     }
 }
